@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Interactive Menu with 3D View</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #f3f4f6, #d1d5db);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #1f2937;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 1rem;
+      width: 100%;
+      max-width: 1080px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: row;
+      overflow: hidden;
+      border: 2px solid #2563eb;
+      height: 90vh;
+    }
+
+    .menu-panel {
+      width: 200px;
+      background: #f8fafc;
+      padding: 1rem 0.75rem;
+      overflow-y: auto;
+      border-right: 2px solid #2563eb;
+    }
+
+    header {
+      background-color: #1f2937;
+      color: white;
+      padding: 0.75rem 1rem;
+      font-family: 'Brush Script MT', cursive;
+      font-size: 1.25rem;
+      text-align: center;
+      user-select: none;
+      border-radius: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-top: 1.25rem;
+      margin-bottom: 0.75rem;
+      border-bottom: 3px solid #2563eb;
+      padding-bottom: 0.25rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.45rem 0.65rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.25s ease;
+      border: 1px solid #e5e7eb;
+    }
+
+    li:hover,
+    li:focus-visible {
+      background-color: #e0e7ff;
+      outline: 2px solid #2563eb;
+      outline-offset: 2px;
+    }
+
+    li[aria-selected="true"] {
+      background-color: #2563eb;
+      color: white;
+    }
+
+    .price {
+      color: #2563eb;
+      font-weight: 700;
+    }
+
+    li[aria-selected="true"] .price {
+      color: white;
+    }
+
+    .summary-panel {
+      flex: 1 1 0%;
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem 1rem;
+      gap: 1rem;
+      overflow: hidden;
+    }
+
+    .summary-scroll {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .summary-scroll h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      border-bottom: 3px solid #2563eb;
+      padding-bottom: 0.4rem;
+    }
+
+    .summary-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .summary-total {
+      font-weight: 800;
+    }
+
+    .viewer-wrapper {
+      flex: 1 1 50%;
+      background: #f1f5f9;
+      border: 2px dashed #94a3b8;
+      border-radius: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem;
+    }
+
+    .viewer-wrapper h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 100%;
+      min-height: 260px;
+      background: #cbd5e1;
+      border-radius: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <aside class="menu-panel">
+      <header>Our Menu</header>
+      <section>
+        <h2>Food</h2>
+        <ul>
+          <li data-item="Burger" data-price="200" role="button" tabindex="0">Burger <span class="price">Rs. 200</span></li>
+          <li data-item="Pizza" data-price="200" role="button" tabindex="0">Pizza <span class="price">Rs. 200</span></li>
+          <li data-item="Salad" data-price="200" role="button" tabindex="0">Salad <span class="price">Rs. 200</span></li>
+          <li data-item="Noodles" data-price="100" role="button" tabindex="0">Noodles <span class="price">Rs. 100</span></li>
+          <li data-item="Maggie" data-price="50"  role="button" tabindex="0">Maggie <span class="price">Rs. 50</span></li>
+          <li data-item="Soup" data-price="250"   role="button" tabindex="0">Soup <span class="price">Rs. 250</span></li>
+          <li data-item="Nachos" data-price="200" role="button" tabindex="0">Nachos <span class="price">Rs. 200</span></li>
+          <li data-item="French Fries" data-price="100" role="button" tabindex="0">French Fries <span class="price">Rs. 100</span></li>
+        </ul>
+      </section>
+      <section>
+        <h2>Drinks</h2>
+        <ul>
+          <li data-item="Fruits Juice" data-price="300" role="button" tabindex="0">Fruits Juice <span class="price">Rs. 300</span></li>
+          <li data-item="Coffee" data-price="200"      role="button" tabindex="0">Coffee <span class="price">Rs. 200</span></li>
+          <li data-item="Hot Tea" data-price="500"      role="button" tabindex="0">Hot Tea <span class="price">Rs. 500</span></li>
+          <li data-item="Americano" data-price="100"    role="button" tabindex="0">Americano <span class="price">Rs. 100</span></li>
+          <li data-item="Latte" data-price="400"        role="button" tabindex="0">Latte <span class="price">Rs. 400</span></li>
+        </ul>
+      </section>
+    </aside>
+
+    <section class="summary-panel">
+      <div class="summary-scroll">
+        <h3>Selected Items</h3>
+        <ul id="summaryList" class="summary-list space-y-1"></ul>
+        <p class="summary-total">Total: Rs. <span id="totalPrice">0</span></p>
+      </div>
+
+      <div class="viewer-wrapper">
+        <h3 id="viewerLabel">3D View</h3>
+        <model-viewer id="modelViewer"
+                      src=""
+                      alt="Select an item to view it in 3D"
+                      camera-controls
+                      auto-rotate
+                      disable-zoom
+                      exposure="1.2"
+                      shadow-intensity="1">
+        </model-viewer>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const MODEL_SOURCES = {
+      'Burger':        'https://shivanibishnani94.github.io/menu-ar/models/cheese_burger.glb',
+      'Pizza':         'https://shivanibishnani94.github.io/menu-ar/models/pizza.glb',
+      'Salad':         'https://shivanibishnani94.github.io/menu-ar/models/salad.glb',
+      'Noodles':       'https://shivanibishnani94.github.io/menu-ar/models/noodles.glb',
+      'Maggie':        'https://shivanibishnani94.github.io/menu-ar/models/maggie.glb',
+      'Soup':          'https://shivanibishnani94.github.io/menu-ar/models/soup.glb',
+      'Nachos':        'https://shivanibishnani94.github.io/menu-ar/models/nachos.glb',
+      'French Fries':  'https://shivanibishnani94.github.io/menu-ar/models/french_fries.glb',
+      'Fruits Juice':  'https://shivanibishnani94.github.io/menu-ar/models/fruits_juice.glb',
+      'Coffee':        'https://shivanibishnani94.github.io/menu-ar/models/coffee.glb',
+      'Hot Tea':       'https://shivanibishnani94.github.io/menu-ar/models/hot_tea.glb',
+      'Americano':     'https://shivanibishnani94.github.io/menu-ar/models/americano.glb',
+      'Latte':         'https://shivanibishnani94.github.io/menu-ar/models/latte.glb'
+    };
+
+    const items       = document.querySelectorAll('li[data-item]');
+    const summaryList = document.getElementById('summaryList');
+    const totalSpan   = document.getElementById('totalPrice');
+    const viewer      = document.getElementById('modelViewer');
+    const viewerLabel = document.getElementById('viewerLabel');
+
+    const selected = new Map();
+
+    function renderSummary() {
+      summaryList.innerHTML = '';
+      let total = 0;
+      selected.forEach((price, name) => {
+        total += price;
+        const li = document.createElement('li');
+        li.innerHTML = `<span>${name}</span><span class="ml-auto text-blue-600 font-semibold">Rs. ${price}</span>`;
+        li.className = "flex justify-between";
+        summaryList.appendChild(li);
+      });
+      totalSpan.textContent = total;
+    }
+
+    function showModel(name) {
+      const src = MODEL_SOURCES[name];
+      viewer.src = src || '';
+      viewerLabel.textContent = src ? `3D View: ${name}` : '3D View';
+    }
+
+    function toggleItem(el) {
+      const name  = el.dataset.item;
+      const price = parseInt(el.dataset.price, 10);
+      const wasSelected = el.getAttribute('aria-selected');
+
+      if (wasSelected) {
+        el.removeAttribute('aria-selected');
+        selected.delete(name);
+      } else {
+        el.setAttribute('aria-selected', 'true');
+        selected.set(name, price);
+      }
+
+      renderSummary();
+
+      if (!wasSelected) {
+        showModel(name);
+      } else if (!selected.size) {
+        viewer.src = "";
+        viewerLabel.textContent = "3D View";
+      }
+    }
+
+    items.forEach(el => {
+      el.addEventListener('click', () => toggleItem(el));
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleItem(el);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
